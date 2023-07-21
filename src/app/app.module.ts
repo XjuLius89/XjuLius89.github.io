@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DutyCalendarComponent } from './component/duty-calendar/duty-calendar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DutyCalendarComponent
   ],
   imports: [
     BrowserModule,

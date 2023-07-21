@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WorkDay } from 'src/model/calendar.interface';
+import { WorkDay } from 'src/models/calendar.interface';
 import { LoggerService } from './logger.service';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class DayValidatorService {
     const checkDutyType = new Map<string, string>();
     const checkRotateType = new Map<string, string>();
 
-    day.duty.forEach(_duty => {
+    day.doctorDuties.forEach(_duty => {
       if (checkDutyType.get(_duty.dutyType)) {
         isValid = false;
         this.logger.error(`found duplicate duty type | type: ${_duty.dutyType} name: ${_duty.doctorName}`, this);

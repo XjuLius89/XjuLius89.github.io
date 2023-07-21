@@ -1,3 +1,5 @@
+import { DoctorOnDuty, Duty } from "./duty.interface";
+
 export interface Month {
 
 }
@@ -6,23 +8,18 @@ export interface Month {
 export interface WorkDay {
     dayNumber: number;
     dayType: 'Monday'| 'Tuesday'| 'Wendesday'|  'Thursday' | 'Friday';
-    duty: Duty[];
+    doctorDuties: DoctorOnDuty[];
 }
 
 export interface Weekend {
     dayNumber: number;
     dayType: 'Saturday' | 'Sunday';
-    duty: Duty[];
+    doctorDuties: DoctorOnDuty[];
 }
 
 export interface Holiday {
     dayType: string;
     dayNumber: number;
-    duty: Duty[];
+    doctorDuties: DoctorOnDuty[];
 }
 
-export interface Duty {
-    doctorName: string;
-    dutyType: string;
-    rotate: string;
-}

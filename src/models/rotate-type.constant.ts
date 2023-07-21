@@ -1,4 +1,4 @@
-export class Rotate {
+export class RotateType {
     // White
     static Gen = "Gen";
     static OBG = "OBG";

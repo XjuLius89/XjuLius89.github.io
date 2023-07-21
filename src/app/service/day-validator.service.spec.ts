@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
 import { DayValidatorService } from './day-validator.service';
-import { WorkDay } from 'src/model/calendar.interface';
-import { DutyType } from 'src/model/duty.constant';
-import { Rotate } from 'src/model/rotate.constant';
+import { WorkDay } from 'src/models/calendar.interface';
+import { DutyType } from 'src/models/duty-type.constant';
+import { RotateType } from 'src/models/rotate-type.constant';
 
 describe('DayValidatorService', () => {
   let service: DayValidatorService;
@@ -22,36 +22,36 @@ describe('DayValidatorService', () => {
     const testWorkDay: WorkDay = {
       dayNumber: 1,
       dayType: 'Wendesday',
-      duty: [
+      doctorDuties: [
         {
           doctorName: 'Napat',
           dutyType: DutyType.duty_1351,
-          rotate: Rotate.ENT,
+          rotate: RotateType.ENT,
         },
         {
           doctorName: 'Rabbit',
           dutyType: DutyType.duty_1352_1,
-          rotate: Rotate.Eye
+          rotate: RotateType.Eye
         },
         {
           doctorName: 'Johnson',
           dutyType: DutyType.duty_1352_2,
-          rotate: Rotate.Gen
+          rotate: RotateType.Gen
         },
         {
           doctorName: 'Jackson',
           dutyType: DutyType.sDuty_r1_1,
-          rotate: Rotate.Plastic
+          rotate: RotateType.Plastic
         },
         {
           doctorName: 'Koji',
           dutyType: DutyType.sDuty_r1_2,
-          rotate: Rotate.Trauma
+          rotate: RotateType.Trauma
         },
         {
           doctorName: 'Six',
           dutyType: DutyType.sDuty_r1_3,
-          rotate: Rotate.Neuro
+          rotate: RotateType.Neuro
         }
       ]
     }

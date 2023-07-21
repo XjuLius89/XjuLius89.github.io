@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DayValidatorService } from 'src/app/service/day-validator.service';
-import { WorkDay } from 'src/model/calendar.interface';
-import { DutyType } from 'src/model/duty.constant';
-import { Rotate } from 'src/model/rotate.constant';
+import { WorkDay } from 'src/models/calendar.interface';
+import { DutyType } from 'src/models/duty-type.constant';
+import { RotateType } from 'src/models/rotate-type.constant';
 
 @Component({
   selector: 'app-duty-calendar',
@@ -24,16 +24,16 @@ export class DutyCalendarComponent implements OnInit {
     this.testWorkDay = {
       dayNumber: 1,
       dayType: 'Wendesday',
-      duty: [
+      doctorDuties: [
         {
           doctorName: 'Napat',
           dutyType: DutyType.duty_1351,
-          rotate: Rotate.ENT,
+          rotate: RotateType.ENT,
         },
         {
           doctorName: 'Rabbit',
           dutyType: DutyType.duty_1352_1,
-          rotate: Rotate.Eye
+          rotate: RotateType.Eye
         }
       ]
     }

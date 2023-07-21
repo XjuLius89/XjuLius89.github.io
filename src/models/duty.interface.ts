@@ -4,5 +4,5 @@ export interface Duty {
 }
 
 export interface DoctorOnDuty extends Duty {
-    dutyType: string;
+    dutyType: string; // 1351, 1352.1
 }

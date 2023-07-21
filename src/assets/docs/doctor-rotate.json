@@ -1,0 +1,21 @@
+{
+    "month": 8,
+    "year": 2023,
+    "rotateList": [
+        {
+            "doctorName": "ณภัทรR1",
+            "rotate_1": "Ortho",
+            "rotate_2": "H&N"
+        },
+        {
+            "doctorName": "วาทินี",
+            "rotate_1": "H&N",
+            "rotate_2": "Ortho"
+        },
+        {
+            "doctorName": "เมธิกา",
+            "rotate_1": "OBG",
+            "rotate_2": "GEN"
+        }   
+    ]
+}

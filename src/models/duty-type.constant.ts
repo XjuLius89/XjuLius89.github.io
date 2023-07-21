@@ -5,4 +5,9 @@ export class DutyType {
     static sDuty_r1_1 = `R1.1`;
     static sDuty_r1_2 = `R1.2`;
     static sDuty_r1_3 = `R1.3`;
+    static pMorning = `คอกก่อนเที่ยง`;
+    static pAfternoon = `คอกหลังเที่ยง`;
+    static pEvening = `คอกเย็น`;
+    static pNight = `คอกดึก`;
+    static pNightStar = `คอกดึกดาว`
 }

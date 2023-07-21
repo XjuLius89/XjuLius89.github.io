@@ -53,7 +53,8 @@ describe('DayValidatorService', () => {
           dutyType: DutyType.sDuty_r1_3,
           rotate: RotateType.Neuro
         }
-      ]
+      ],
+      isNonBusinessDay: false
     }
     expect(service.isValidWorkDay(testWorkDay)).toEqual(true);
   });

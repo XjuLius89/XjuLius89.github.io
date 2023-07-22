@@ -26,9 +26,29 @@ export class DoctorAssignerService {
   ) { }
 
   setDoctorList(list: RotateData[]): void {
-    this.doctorList = list;
+    this.doctorList = this.shuffle(list);
     this.listSize = this.doctorList.length;
+    this.resetAssignDuty();
   }
+
+  shuffle(array: RotateData[]) {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+  }
+
 
   next(skipList: string[]): RotateData {
     this.logger.info(`finding.. doctor...`, this);
@@ -53,7 +73,8 @@ export class DoctorAssignerService {
         currentMaxAssignedDutyCount = doctor.length;
       }
     });
-    this.logger.info(`current max assigned duty count = ${currentMaxAssignedDutyCount}`, this);
+    this.logger.info(`current MAX assigned duty count = ${currentMaxAssignedDutyCount}`, this);
+
 
     let foundIndex = 0;
 
@@ -95,13 +116,31 @@ export class DoctorAssignerService {
     } else {
       this.doctorAssignedList.set(doctorName, [assigned]);
     }
+  }
 
+  resetAssignDuty(): void {
+    this.doctorAssignedList = new Map();
   }
 
   report(): void {
+    const size = this.doctorAssignedList.size;
+    let med = 0;
+    let max = 0;
+    let min = size;
+    this.logger.info(`============ BEGIN REPORT ============= `, this);
+    this.logger.info(` Assigned total ${size} doctors `, this);
+
     this.doctorAssignedList.forEach((key, value) => {
-      this.logger.info(`key: ${JSON.stringify(value)} value: ${JSON.stringify(key.length)} `, this);
+      this.logger.info(` Doctor: ${JSON.stringify(value)} has: ${JSON.stringify(key.length)} shifts`, this);
+      med += key.length;
+      if (key.length > max) { max = key.length; }
+      if (key.length < min) { min = key.length; }
     });
+
+    this.logger.info(` Min: ${min} `, this);
+    this.logger.info(` Max: ${max} `, this);
+    this.logger.info(` Medium: ${med / size} `, this);
+    this.logger.info(`============ END REPORT ============= `, this);
 
   }
 }

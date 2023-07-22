@@ -1,13 +1,12 @@
-import { DoctorAssignerService } from './../../service/doctor-assigner.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, ColumnApi, GridReadyEvent } from 'ag-grid-community';
-import { Observable } from 'rxjs';
 import { LoggingService } from 'src/app/service/common/logger.service';
 import { DayValidatorService } from 'src/app/service/day-validator.service';
 import { RotateUtilsService } from 'src/app/service/rotate-utils.service';
 import { RotateList } from 'src/models/rotate-data.interface';
+import { DoctorAssignerService } from './../../service/doctor-assigner.service';
 
 import { RotateType } from 'src/models/rotate-type.constant';
 import { DutyRowData } from 'src/models/row-data.interface';
@@ -95,6 +94,10 @@ export class DutyCalendarComponent implements OnInit {
   ngOnInit(): void {
     this.readJsonData();
   }
+
+  shuffle(): void {
+    this.readJsonData();
+  };
 
   // Load data from github - duty rotate data
   onGridReady(params: GridReadyEvent) {

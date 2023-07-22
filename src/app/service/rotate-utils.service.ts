@@ -23,7 +23,7 @@ export class RotateUtilsService {
   parse(list: RotateList): WorkDay[] {
     const month = this.getMonthTemplate(list.year, list.month);
     this.logger.info(`year/month (${list.year}/${list.month}) = ${JSON.stringify(month.length, null, 2)}`, this);
-
+    
     this.doctorAssignerService.setDoctorList(list.rotateList);
 
     month.forEach(day => {

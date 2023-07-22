@@ -87,8 +87,8 @@ export class DutyCalendarComponent implements OnInit {
       sDuty_r1_2_rotate: RotateType.Uro,
       sDuty_r1_3_doctor_name: 'ปานจันทร์',
       sDuty_r1_3_rotate: RotateType.SIPAC,
-      pool_morning_doctor_name: 'สิรภัทร',
-      pool_morning_rotate: RotateType.Trauma,
+      pMorning_doctor_name: 'สิรภัทร',
+      pMorning_rotate: RotateType.Trauma,
     },
   ] as DutyRowData[];
 

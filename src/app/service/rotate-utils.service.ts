@@ -67,24 +67,24 @@ export class RotateUtilsService {
             row.sDuty_r1_3_rotate = doctor.rotate;
             break;
           case DutyType.pMorning:
-            row.pool_morning_doctor_name = doctor.doctorName;
-            row.pool_morning_rotate = doctor.rotate;
+            row.pMorning_doctor_name = doctor.doctorName;
+            row.pMorning_rotate = doctor.rotate;
             break;
           case DutyType.pAfternoon:
-            row.pool_afternoon_doctor_name = doctor.doctorName;
-            row.pool_afternoon_rotate = doctor.rotate;
+            row.pAfternoon_doctor_name = doctor.doctorName;
+            row.pAfternoon_rotate = doctor.rotate;
             break;
           case DutyType.pEvening:
-            row.pool_evening_doctor_name = doctor.doctorName;
-            row.pool_evening_rotate = doctor.rotate;
+            row.pEvening_doctor_name = doctor.doctorName;
+            row.pEvening_rotate = doctor.rotate;
             break;
           case DutyType.pNight:
-            row.pool_night_doctor_name = doctor.doctorName;
-            row.pool_night_rotate = doctor.rotate;
+            row.pNight_doctor_name = doctor.doctorName;
+            row.pNight_rotate = doctor.rotate;
             break;
           case DutyType.pNightStar:
-            row.pool_night_star_doctor_name = doctor.doctorName;
-            row.pool_night_start_rotate = doctor.rotate;
+            row.pNight_star_doctor_name = doctor.doctorName;
+            row.pNight_start_rotate = doctor.rotate;
             break;
           default:
             throw Error('Invalid DutyType!');

@@ -81,6 +81,66 @@
             "doctorName": "นิโลบล",
             "rotate_1": "OBG",
             "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "กาญจนี",
+            "rotate_1": "Neuro",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "รวิพร",
+            "rotate_1": "Neuro",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "ชัยภัทร",
+            "rotate_1": "OBG",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "อารดา",
+            "rotate_1": "Uro",
+            "rotate_2": "Ortho"
+        },
+        {
+            "doctorName": "ปณิดา",
+            "rotate_1": "GEN",
+            "rotate_2": "OBG"
+        },
+        {
+            "doctorName": "พสิษฐ์",
+            "rotate_1": "Ortho",
+            "rotate_2": "H&N"
+        },
+        {
+            "doctorName": "พีรวิชญ์",
+            "rotate_1": "OBG",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "มนัญชยา",
+            "rotate_1": "GEN",
+            "rotate_2": "OBG"
+        },
+        {
+            "doctorName": "ณัฐณิชา",
+            "rotate_1": "Ortho",
+            "rotate_2": "Uro"
+        },
+        {
+            "doctorName": "เมธิกา",
+            "rotate_1": "OBG",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "วาทินี",
+            "rotate_1": "H&N",
+            "rotate_2": "Ortho"
+        },
+        {
+            "doctorName": "ณภัทรR1",
+            "rotate_1": "Ortho",
+            "rotate_2": "H&N"
         }
     ]
 }

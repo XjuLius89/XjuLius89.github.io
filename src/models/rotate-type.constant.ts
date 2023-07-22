@@ -1,6 +1,7 @@
 export class RotateType {
     // White
-    static Gen = "Gen";
+    static GEN = "GEN";
+    static HN = "H&N";
     static OBG = "OBG";
     static Ortho = "Ortho";
     static Neuro = "Neuro";

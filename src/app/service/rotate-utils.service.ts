@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { WorkDay } from 'src/models/calendar.interface';
 import { DutyType } from 'src/models/duty-type.constant';
-import { DoctorOnDuty } from 'src/models/duty.interface';
-import { RotateData, RotateList } from 'src/models/rotate-data.interface';
+import { RotateList } from 'src/models/rotate-data.interface';
 import { RotateType } from 'src/models/rotate-type.constant';
 import { DutyRowData } from 'src/models/row-data.interface';
+import { Scheme } from 'src/models/scheme';
 import { LoggingService } from './common/logger.service';
+import { DoctorAssignerService } from './doctor-assigner.service';
+import { DoctorOnDuty } from 'src/models/duty.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +17,199 @@ export class RotateUtilsService {
 
   constructor(
     private logger: LoggingService,
+    private doctorAssignerService: DoctorAssignerService,
   ) { }
 
   parse(list: RotateList): WorkDay[] {
-
-    const result: WorkDay[] = [];
     const month = this.getMonthTemplate(list.year, list.month);
+    this.logger.info(`year/month (${list.year}/${list.month}) = ${JSON.stringify(month.length, null, 2)}`, this);
 
-    this.logger.info(`year/month (${list.year}/${list.month}) = ${JSON.stringify(month, null, 2)}`, this);
+    this.doctorAssignerService.setDoctorList(list.rotateList);
 
-    this.determineDutyType(list.rotateList, month);
+    month.forEach(day => {
+      
+      this.logger.info(`############ Day: ${day.dayNumber} | ${day.dayName} ############ `, this);
 
+      // Normal day
+      if (!day.isWeekend) {
+        const normalDay = new Scheme().normal;
+
+        normalDay.forEach(slot => {
+
+
+          this.logger.info(`\n========== Assigning Slot: ${slot.dutyType} ==========`, this);
+
+
+          let skipList: string[] = [];
+          let shouldRetry = true;
+          let retry = 0;
+
+          do {
+            retry++;
+            if (retry === 10) {
+              shouldRetry = false;
+            }
+            const doctor = this.doctorAssignerService.next(skipList);
+
+            if(doctor === undefined) {
+              this.logger.error(`No Doctor left to assign.`, this);
+              skipList = [];
+              break;
+            }
+
+            let doctorRotate = this.isFirstHalf(day) ? doctor?.rotate_1 : doctor?.rotate_2;
+
+            switch (doctorRotate) {
+              case RotateType.GEN:
+              case RotateType.HN:
+              case RotateType.OBG:
+              case RotateType.Ortho:
+              case RotateType.Neuro:
+              case RotateType.Ped:
+                // จริง 1 เสริม 1
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && this.isExistFor(normalDay, doctorRotate) && !this.hasTwoRotateAlready(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                break;
+
+              case RotateType.Uro:
+              case RotateType.Plastic:
+              case RotateType.ENT:
+              case RotateType.Trauma:
+                // จริง or เสริม
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                break;
+
+              case RotateType.SIPAC:
+                // เสริม 1
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              case RotateType.Eye:
+                // จริงหรือเสริม ห้ามวันพุธ
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              case RotateType.XRay:
+                // จริงหรือเสริม ห้ามวันจันทร์และพุธ
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(normalDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              default:
+                break;
+            }
+
+            if (slot.doctorName === '') {
+              this.logger.warn(`${slot.dutyType} | unable to assign this doctor ${doctor.doctorName}`, this);
+
+              if (skipList.findIndex(e => e === doctor.doctorName) === -1) {
+                skipList.push(doctor.doctorName);
+              }
+              
+              this.logger.warn(`current skip list = ${JSON.stringify(skipList)}`, this);
+
+            } else {
+              this.logger.info(`Slot: ${slot.dutyType} ====> Assigned To :${doctor.doctorName}`, this);
+            }
+
+          } while (slot.doctorName === '' && shouldRetry);
+
+        });
+
+
+        day.doctorDuties = [...normalDay];
+
+      } else if (day.isWeekend) {
+        // TODO implement weekend
+      }
+    });
+
+    return month;
+  }
+
+  isExistFor(list: DoctorOnDuty[], doctorRotate: string): boolean {
+    let alreadyExist = false;
+    if (list.filter(e => e.rotate === doctorRotate).length) {
+      alreadyExist = true;
+    }
+    return alreadyExist;
+  }
+
+  hasTwoRotateAlready(list: DoctorOnDuty[], doctorRotate: string): boolean {
+    let result = false;
+    if (list.filter(e => e.rotate === doctorRotate).length === 2) {
+      result = true;
+    }
     return result;
+  }
+
+  // Determain if เวรจริง or เวรเสริม
+  isMainDuty(dutyType: string): boolean {
+    let isMainDuty = true;
+    switch (dutyType) {
+      case DutyType.sDuty_r1_1:
+      case DutyType.sDuty_r1_2:
+      case DutyType.sDuty_r1_3:
+        isMainDuty = false;
+        break;
+      default:
+        isMainDuty = true;
+        break;
+    }
+    return isMainDuty;
+  }
+
+  isFirstHalf(day: WorkDay): boolean {
+    return day.dayNumber <= 15;
   }
 
   getMonthTemplate(year: string, month: string): WorkDay[] {
@@ -46,35 +229,6 @@ export class RotateUtilsService {
 
       result.push(workDay);
     }
-
-    return result;
-  }
-
-  determineDutyType(rotateData: RotateData[], month: WorkDay[]): DoctorOnDuty[] {
-    const result: DoctorOnDuty[] = [];
-
-    month.forEach(day => {
-
-      if (day.dayNumber <= 15) {
-        // first half
-
-        const duties: DoctorOnDuty[] = [];
-
-        if (!day.isWeekend) {
-          
-          rotateData.forEach(doctor => {
-            if (doctor.rotate_1) {
-  
-            }
-          });
-        }
-
-
-
-      } else {
-        // second half
-      }
-    });
 
     return result;
   }

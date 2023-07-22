@@ -29,22 +29,22 @@ export class DutyCalendarComponent implements OnInit {
     { field: 'd1352_1_rotate', headerName: 'หน่วย' },
     { field: 'd1352_2_doctor_name', headerName: '1352.2' },
     { field: 'd1352_2_rotate', headerName: 'หน่วย' },
-    { field: 'r1_1_doctor_name', headerName: 'R1.1' },
-    { field: 'r1_1_rotate', headerName: 'หน่วย' },
-    { field: 'r1_2_doctor_name', headerName: 'R1.2' },
-    { field: 'r1_2_rotate', headerName: 'หน่วย' },
-    { field: 'r1_3_doctor_name', headerName: 'R1.3' },
-    { field: 'r1_3_rotate', headerName: 'หน่วย' },
-    { field: 'pool_morning_doctor_name', headerName: 'คอกก่อนเที่ยง' },
-    { field: 'pool_morning_rotate', headerName: 'หน่วย' },
-    { field: 'pool_afternoon_doctor_name', headerName: 'คอกหลังเที่ยง' },
-    { field: 'pool_afternoon_rotate', headerName: 'หน่วย' },
-    { field: 'pool_evening_doctor_name', headerName: 'คอกบ่าย' },
-    { field: 'pool_evening_rotate', headerName: 'หน่วย' },
-    { field: 'pool_night_doctor_name', headerName: 'คอกดึก' },
-    { field: 'pool_night_rotate', headerName: 'หน่วย' },
-    { field: 'pool_night_star_doctor_name', headerName: 'คอกดึกดาว' },
-    { field: 'pool_night_start_rotate', headerName: 'หน่วย' },
+    { field: 'sDuty_r1_1_doctor_name', headerName: 'R1.1' },
+    { field: 'sDuty_r1_1_rotate', headerName: 'หน่วย' },
+    { field: 'sDuty_r1_2_doctor_name', headerName: 'R1.2' },
+    { field: 'sDuty_r1_2_rotate', headerName: 'หน่วย' },
+    { field: 'sDuty_r1_3_doctor_name', headerName: 'R1.3' },
+    { field: 'sDuty_r1_3_rotate', headerName: 'หน่วย' },
+    { field: 'pMorning_doctor_name', headerName: 'คอกก่อนเที่ยง' },
+    { field: 'pMorning_rotate', headerName: 'หน่วย' },
+    { field: 'pAfternoon_doctor_name', headerName: 'คอกหลังเที่ยง' },
+    { field: 'pAfternoon_rotate', headerName: 'หน่วย' },
+    { field: 'pEvening_doctor_name', headerName: 'คอกบ่าย' },
+    { field: 'pEvening_rotate', headerName: 'หน่วย' },
+    { field: 'pNight_doctor_name', headerName: 'คอกดึก' },
+    { field: 'pNight_rotate', headerName: 'หน่วย' },
+    { field: 'pNight_star_doctor_name', headerName: 'คอกดึกดาว' },
+    { field: 'pNight_start_rotate', headerName: 'หน่วย' },
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -58,38 +58,20 @@ export class DutyCalendarComponent implements OnInit {
   public rowData = [
     {
       dateNumber: 1,
-      dateName: 'Tue', 
+      dateName: 'Tue',
       d1351_doctor_name: 'ณภัทร',
       d1351_rotate: RotateType.ENT,
       d1352_1_doctor_name: 'วริษฐา',
       d1352_1_rotate: RotateType.Eye,
       d1352_2_doctor_name: 'เมธัส',
-      d1352_2_rotate: RotateType.Gen,
+      d1352_2_rotate: RotateType.GEN,
       sDuty_r1_1_doctor_name: 'จิรัชยา',
       sDuty_r1_1_rotate: RotateType.XRay,
       sDuty_r1_2_doctor_name: 'ชญานิษฐ์',
       sDuty_r1_2_rotate: RotateType.Uro,
       sDuty_r1_3_doctor_name: 'ปานจันทร์',
       sDuty_r1_3_rotate: RotateType.SIPAC,
-    },
-    {
-      dateNumber: 2,
-      dateName: 'Wed',
-      d1351_doctor_name: 'ณภัทร',
-      d1351_rotate: RotateType.ENT,
-      d1352_1_doctor_name: 'วริษฐา',
-      d1352_1_rotate: RotateType.Eye,
-      d1352_2_doctor_name: 'เมธัส',
-      d1352_2_rotate: RotateType.Gen,
-      sDuty_r1_1_doctor_name: 'จิรัชยา',
-      sDuty_r1_1_rotate: RotateType.XRay,
-      sDuty_r1_2_doctor_name: 'ชญานิษฐ์',
-      sDuty_r1_2_rotate: RotateType.Uro,
-      sDuty_r1_3_doctor_name: 'ปานจันทร์',
-      sDuty_r1_3_rotate: RotateType.SIPAC,
-      pMorning_doctor_name: 'สิรภัทร',
-      pMorning_rotate: RotateType.Trauma,
-    },
+    }
   ] as DutyRowData[];
 
   // For accessing the Grid's API
@@ -133,12 +115,16 @@ export class DutyCalendarComponent implements OnInit {
     this.agGrid.api.sizeColumnsToFit();
   }
 
-  autoSizeAll(skipHeader: boolean) {
+  autoSizeAll(skipHeader: boolean): void {
     const allColumnIds: string[] = [];
     this.gridColumnApi.getColumns()!.forEach((column) => {
       allColumnIds.push(column.getId());
     });
     this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }
+
+  download(): void {
+    this.agGrid.api.exportDataAsCsv();
   }
 
   readJsonData(): void {
@@ -152,10 +138,10 @@ export class DutyCalendarComponent implements OnInit {
       this.year = this.rotateJsonData.year;
 
       const workDay = this.rotateUtilsService.parse(this.rotateJsonData);
-      this.logger.info(`jsonData = ${JSON.stringify(workDay, null, 2)}`, this);
+      // this.logger.info(`jsonData = ${JSON.stringify(workDay, null, 2)}`, this);
 
       const rowData = this.rotateUtilsService.transfromWorkDayToRowData(workDay);
-      this.logger.info(`rowData = ${JSON.stringify(rowData, null, 2)}`, this);
+      // this.logger.info(`rowData = ${JSON.stringify(rowData, null, 2)}`, this);
 
       this.agGrid.api.setRowData(rowData);
     });

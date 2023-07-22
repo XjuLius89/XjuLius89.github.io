@@ -1,9 +1,17 @@
 <h1>ตารางจัดเวรเดือน {{month}}/{{year}} </h1>
 
 <div id="button-panel">
-    <button mat-raised-button class="btn-1" color="primary"> เริ่มจัดเวร </button>
-    <button mat-raised-button class="btn-1" (click)="sizeToFit()">Size to Fit</button>
+
+    <button mat-raised-button class="btn-1" color="primary"> เริ่มจัดเวร
+    </button>
+    <button mat-raised-button class="btn-1" (click)="sizeToFit()">Size to
+        Fit</button>
     <button mat-raised-button class="btn-1" (click)="autoSizeAll( false)">autoSizeAll</button>
+
+    <button mat-raised-button class="btn-1" color="accent"
+        (click)="download()">
+        Download </button>
+
 </div>
 
 <ag-grid-angular #agGrid style="width: 100%; height: 90%"

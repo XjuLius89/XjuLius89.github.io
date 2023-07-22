@@ -21,7 +21,7 @@ describe('DayValidatorService', () => {
   it('test isValidWorkDay', () => {
     const testWorkDay: WorkDay = {
       dayNumber: 1,
-      dayType: 'Wendesday',
+      dayName: 'Wendesday',
       doctorDuties: [
         {
           doctorName: 'Napat',

@@ -22,13 +22,13 @@ describe('RotateUtilsService', () => {
       rotateList: [
         {
           doctorName: "ณภัทรR1",
-          rotate_first_half: "Ortho",
-          rotate_second_half: "H&N"
+          rotate_1: "Ortho",
+          rotate_2: "H&N"
         },
         {
           doctorName: "วาทินี",
-          rotate_first_half: "H&N",
-          rotate_second_half: "Ortho"
+          rotate_1: "H&N",
+          rotate_2: "Ortho"
         }
       ]
     };
@@ -37,6 +37,6 @@ describe('RotateUtilsService', () => {
     // parse 2023-08, expect for 31 days.
     expect(res.length).toEqual(31);
     expect(res[0].dayNumber).toEqual(1);
-    expect(res[0].dayType).toEqual('Tue');
+    expect(res[0].dayName).toEqual('Tue');
   });
 });

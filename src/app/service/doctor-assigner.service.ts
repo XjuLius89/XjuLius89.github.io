@@ -37,6 +37,7 @@ export class DoctorAssignerService {
 
     this.logger.warn(`skipList: ${skipList}`, this);
 
+    // remove skip name from the list
     for (let i = 0; i < skipList.length; i++) {
       const index = copyDoctorList.findIndex(e => e.doctorName === skipList[i]);
       if (index > -1) {
@@ -75,8 +76,8 @@ export class DoctorAssignerService {
     }
 
     if (copyDoctorList[foundIndex] === undefined) {
-      this.logger.error(`No doctor left to assign. Then starting new from the list.`, this);
-      return copyDoctorList[0];
+      this.logger.error(`No doctor left to assign.`, this);
+      return copyDoctorList[foundIndex];
     }
 
     return copyDoctorList[foundIndex];
@@ -94,6 +95,13 @@ export class DoctorAssignerService {
     } else {
       this.doctorAssignedList.set(doctorName, [assigned]);
     }
+
+  }
+
+  report(): void {
+    this.doctorAssignedList.forEach((key, value) => {
+      this.logger.info(`key: ${JSON.stringify(value)} value: ${JSON.stringify(key.length)} `, this);
+    });
 
   }
 }

@@ -46,13 +46,13 @@ export class RotateUtilsService {
 
           do {
             retry++;
-            if (retry === 10) {
+            if (retry === list.rotateList.length) {
               shouldRetry = false;
             }
             const doctor = this.doctorAssignerService.next(skipList);
 
             if(doctor === undefined) {
-              this.logger.error(`No Doctor left to assign.`, this);
+              this.logger.error(`No Doctor left to assign. Slot ${slot.dutyType} left empty.`, this);
               skipList = [];
               break;
             }
@@ -165,11 +165,144 @@ export class RotateUtilsService {
 
         });
 
-
         day.doctorDuties = [...normalDay];
 
       } else if (day.isWeekend) {
-        // TODO implement weekend
+        
+        const weekendDay = new Scheme().weekend;
+
+        weekendDay.forEach(slot => {
+
+
+          this.logger.info(`\n========== Assigning Slot: ${slot.dutyType} ==========`, this);
+
+
+          let skipList: string[] = [];
+          let shouldRetry = true;
+          let retry = 0;
+
+          do {
+            retry++;
+            if (retry === list.rotateList.length) {
+              shouldRetry = false;
+            }
+            const doctor = this.doctorAssignerService.next(skipList);
+
+            if(doctor === undefined) {
+              this.logger.error(`No Doctor left to assign. Slot ${slot.dutyType} left empty.`, this);
+              skipList = [];
+              break;
+            }
+
+            let doctorRotate = this.isFirstHalf(day) ? doctor?.rotate_1 : doctor?.rotate_2;
+
+            switch (doctorRotate) {
+              case RotateType.GEN:
+              case RotateType.HN:
+              case RotateType.OBG:
+              case RotateType.Ortho:
+              case RotateType.Neuro:
+              case RotateType.Ped:
+                // จริง 1 เสริม 1
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && this.isExistFor(weekendDay, doctorRotate) && !this.hasTwoRotateAlready(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                break;
+
+              case RotateType.Uro:
+              case RotateType.Plastic:
+              case RotateType.ENT:
+              case RotateType.Trauma:
+                // จริง or เสริม
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                break;
+
+              case RotateType.SIPAC:
+                // เสริม 1
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              case RotateType.Eye:
+                // จริงหรือเสริม ห้ามวันพุธ
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              case RotateType.XRay:
+                // จริงหรือเสริม ห้ามวันจันทร์และพุธ
+
+                if (this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+
+                if (!this.isMainDuty(slot.dutyType) && !this.isExistFor(weekendDay, doctorRotate)) {
+                  slot.doctorName = doctor.doctorName;
+                  slot.rotate = doctorRotate;
+                  this.doctorAssignerService.setAssignDuty(doctor.doctorName, doctorRotate, slot.dutyType, list.month + '/' + day.dayNumber);
+                }
+                break;
+
+              default:
+                break;
+            }
+
+            if (slot.doctorName === '') {
+              this.logger.warn(`${slot.dutyType} | unable to assign this doctor ${doctor.doctorName}`, this);
+
+              if (skipList.findIndex(e => e === doctor.doctorName) === -1) {
+                skipList.push(doctor.doctorName);
+              }
+              
+              this.logger.warn(`current skip list = ${JSON.stringify(skipList)}`, this);
+
+            } else {
+              this.logger.info(`Slot: ${slot.dutyType} ====> Assigned To :${doctor.doctorName}`, this);
+            }
+
+          } while (slot.doctorName === '' && shouldRetry);
+
+        });
+
+        day.doctorDuties = [...weekendDay];
       }
     });
 

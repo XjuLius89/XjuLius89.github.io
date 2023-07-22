@@ -1,3 +1,4 @@
+import { DoctorAssignerService } from './../../service/doctor-assigner.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -83,6 +84,7 @@ export class DutyCalendarComponent implements OnInit {
 
   constructor(
     private dayValidatorService: DayValidatorService,
+    private doctorAssignerService: DoctorAssignerService,
     private rotateUtilsService: RotateUtilsService,
     private http: HttpClient,
     private logger: LoggingService,
@@ -144,6 +146,8 @@ export class DutyCalendarComponent implements OnInit {
       // this.logger.info(`rowData = ${JSON.stringify(rowData, null, 2)}`, this);
 
       this.agGrid.api.setRowData(rowData);
+
+      this.doctorAssignerService.report();
     });
   }
 }

@@ -1,5 +1,5 @@
 {
-    "month": "09",
+    "month": "07",
     "year": "2023",
     "rotateList": [
         {
@@ -36,6 +36,51 @@
             "doctorName": "ดวงเนตร",
             "rotate_1": "GEN",
             "rotate_2": "OBG"
+        },
+        {
+            "doctorName": "นันทมาส",
+            "rotate_1": "Ortho",
+            "rotate_2": "Neuro"
+        },
+        {
+            "doctorName": "อภิชญา",
+            "rotate_1": "GEN",
+            "rotate_2": "OBG"
+        },
+        {
+            "doctorName": "อรรวี",
+            "rotate_1": "Uro",
+            "rotate_2": "Ortho"
+        },
+        {
+            "doctorName": "สิรภัทร",
+            "rotate_1": "GEN",
+            "rotate_2": "Neuro"
+        },
+        {
+            "doctorName": "ธนัชพร",
+            "rotate_1": "GEN",
+            "rotate_2": "OBG"
+        },
+        {
+            "doctorName": "วันฤทัย",
+            "rotate_1": "Ortho",
+            "rotate_2": "Neuro"
+        },
+        {
+            "doctorName": "จิดาภาR1",
+            "rotate_1": "Ortho",
+            "rotate_2": "Uro"
+        },
+        {
+            "doctorName": "กมลพรรณ",
+            "rotate_1": "Neuro",
+            "rotate_2": "GEN"
+        },
+        {
+            "doctorName": "นิโลบล",
+            "rotate_1": "OBG",
+            "rotate_2": "GEN"
         }
     ]
 }

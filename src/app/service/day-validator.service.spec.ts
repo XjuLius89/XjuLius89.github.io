@@ -36,7 +36,7 @@ describe('DayValidatorService', () => {
         {
           doctorName: 'Johnson',
           dutyType: DutyType.duty_1352_2,
-          rotate: RotateType.Gen
+          rotate: RotateType.GEN
         },
         {
           doctorName: 'Jackson',

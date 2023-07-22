@@ -15,23 +15,28 @@ describe('RotateUtilsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('test read', () => {
+  it('test parse correctly', () => {
     const list: RotateList = {
       month: '08',
       year: '2023',
       rotateList: [
         {
           doctorName: "ณภัทรR1",
-          rotate_1: "Ortho",
-          rotate_2: "H&N"
+          rotate_first_half: "Ortho",
+          rotate_second_half: "H&N"
         },
         {
           doctorName: "วาทินี",
-          rotate_1: "H&N",
-          rotate_2: "Ortho"
+          rotate_first_half: "H&N",
+          rotate_second_half: "Ortho"
         }
       ]
     };
-    expect(JSON.stringify(service.read(list))).toEqual(``);
+    const res = service.parse(list);
+
+    // parse 2023-08, expect for 31 days.
+    expect(res.length).toEqual(31);
+    expect(res[0].dayNumber).toEqual(1);
+    expect(res[0].dayType).toEqual('Tue');
   });
 });

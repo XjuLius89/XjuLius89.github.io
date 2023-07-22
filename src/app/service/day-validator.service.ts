@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WorkDay } from 'src/models/calendar.interface';
-import { LoggerService } from './logger.service';
+import { LoggingService } from './common/logger.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class DayValidatorService {
   readonly className = `DayValidatorService`;
 
   constructor(
-    private logger: LoggerService,
+    private logger: LoggingService,
   ) { }
 
   isValidWorkDay(day: WorkDay): boolean {

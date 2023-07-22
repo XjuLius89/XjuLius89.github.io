@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, ColumnApi, GridReadyEvent } from 'ag-grid-community';
+import { LoggingService } from 'src/app/service/common/logger.service';
 import { DayValidatorService } from 'src/app/service/day-validator.service';
-import { LoggerService } from 'src/app/service/logger.service';
+
 import { RotateType } from 'src/models/rotate-type.constant';
 import { DutyRowData } from 'src/models/row-data.interface';
 
@@ -92,7 +93,7 @@ export class DutyCalendarComponent implements OnInit {
   constructor(
     private dayValidatorService: DayValidatorService,
     private http: HttpClient,
-    private logger: LoggerService,
+    private logger: LoggingService,
   ) {
 
   }

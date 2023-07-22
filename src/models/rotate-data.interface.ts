@@ -6,6 +6,6 @@ export interface RotateList {
 
 export interface RotateData {
     doctorName: string;
-    rotate_1: string;
-    rotate_2: string;
+    rotate_first_half: string;
+    rotate_second_half: string;
 }

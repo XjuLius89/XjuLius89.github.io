@@ -9,7 +9,7 @@ export class RotateUtilsService {
 
   constructor() { }
 
-  read(list: RotateList): WorkDay[] {
+  parse(list: RotateList): WorkDay[] {
     const result: WorkDay[] = [];
 
     const daysCount = this.getMonthDaysCount(list.year + '-' + list.month);

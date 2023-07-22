@@ -1,33 +1,81 @@
 import { Injectable } from '@angular/core';
 import { WorkDay } from 'src/models/calendar.interface';
 import { DutyType } from 'src/models/duty-type.constant';
-import { RotateList } from 'src/models/rotate-data.interface';
+import { DoctorOnDuty } from 'src/models/duty.interface';
+import { RotateData, RotateList } from 'src/models/rotate-data.interface';
+import { RotateType } from 'src/models/rotate-type.constant';
 import { DutyRowData } from 'src/models/row-data.interface';
+import { LoggingService } from './common/logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RotateUtilsService {
+  readonly className = `RotateUtilsService`;
 
-  constructor() { }
+  constructor(
+    private logger: LoggingService,
+  ) { }
 
   parse(list: RotateList): WorkDay[] {
+
     const result: WorkDay[] = [];
-    const daysCount = this.getMonthDaysCount(list.year + '-' + list.month);
+    const month = this.getMonthTemplate(list.year, list.month);
+
+    this.logger.info(`year/month (${list.year}/${list.month}) = ${JSON.stringify(month, null, 2)}`, this);
+
+    this.determineDutyType(list.rotateList, month);
+
+    return result;
+  }
+
+  getMonthTemplate(year: string, month: string): WorkDay[] {
+    const result: WorkDay[] = [];
+    const daysCount = this.getMonthDaysCount(year + '-' + month);
 
     for (let i = 1; i <= daysCount; i++) {
-      var d = new Date(list.year + '/' + list.month + '/' + i);
+      var d = new Date(year + '/' + month + '/' + i);
       var dayName = d.toString().split(' ')[0];
 
       const workDay: WorkDay = {
         dayNumber: i,
         dayName: dayName,
-        isNonBusinessDay: false,
+        isWeekend: (dayName === 'Sat' || dayName === 'Sun'),
         doctorDuties: []
       };
 
       result.push(workDay);
     }
+
+    return result;
+  }
+
+  determineDutyType(rotateData: RotateData[], month: WorkDay[]): DoctorOnDuty[] {
+    const result: DoctorOnDuty[] = [];
+
+    month.forEach(day => {
+
+      if (day.dayNumber <= 15) {
+        // first half
+
+        const duties: DoctorOnDuty[] = [];
+
+        if (!day.isWeekend) {
+          
+          rotateData.forEach(doctor => {
+            if (doctor.rotate_1) {
+  
+            }
+          });
+        }
+
+
+
+      } else {
+        // second half
+      }
+    });
+
     return result;
   }
 

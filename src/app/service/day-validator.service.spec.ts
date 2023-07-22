@@ -54,7 +54,7 @@ describe('DayValidatorService', () => {
           rotate: RotateType.Neuro
         }
       ],
-      isNonBusinessDay: false
+      isWeekend: false
     }
     expect(service.isValidWorkDay(testWorkDay)).toEqual(true);
   });
